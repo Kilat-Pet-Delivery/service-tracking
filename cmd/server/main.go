@@ -26,18 +26,18 @@ import (
 )
 
 func main() {
+	// Load configuration.
+	cfg, err := config.Load()
+	if err != nil {
+		panic("failed to load configuration: " + err.Error())
+	}
+
 	// Initialize logger.
-	log, err := logger.NewNamed("development", "service-tracking")
+	log, err := logger.NewNamed(cfg.AppEnv, "service-tracking")
 	if err != nil {
 		panic("failed to initialize logger: " + err.Error())
 	}
 	defer func() { _ = log.Sync() }()
-
-	// Load configuration.
-	cfg, err := config.Load()
-	if err != nil {
-		log.Fatal("failed to load configuration", zap.Error(err))
-	}
 
 	// Connect to database.
 	dbConfig := database.PostgresConfig{
@@ -53,11 +53,18 @@ func main() {
 		log.Fatal("failed to connect to database", zap.Error(err))
 	}
 
-	// Auto-migrate GORM models.
-	if err := db.AutoMigrate(&repository.TripTrackModel{}, &repository.WaypointModel{}); err != nil {
-		log.Fatal("failed to auto-migrate database", zap.Error(err))
+	// Run database migrations.
+	if cfg.AppEnv == "development" {
+		if err := db.AutoMigrate(&repository.TripTrackModel{}, &repository.WaypointModel{}); err != nil {
+			log.Fatal("failed to auto-migrate database", zap.Error(err))
+		}
+		log.Info("database migration completed (dev auto-migrate)")
+	} else {
+		dbURL := dbConfig.DatabaseURL()
+		if err := database.RunMigrations(dbURL, "migrations", log); err != nil {
+			log.Fatal("failed to run migrations", zap.Error(err))
+		}
 	}
-	log.Info("database migration completed")
 
 	// Initialize JWT manager.
 	accessExpiry, err := time.ParseDuration(cfg.JWTConfig.AccessExpiry)

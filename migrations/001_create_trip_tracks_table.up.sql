@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE trip_tracks (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     booking_id UUID UNIQUE NOT NULL,
