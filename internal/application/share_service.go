@@ -22,14 +22,14 @@ type SharedTripDTO struct {
 
 // SharedTrackingDTO is the public tracking data for a shared trip.
 type SharedTrackingDTO struct {
-	BookingID  uuid.UUID      `json:"booking_id"`
-	Status     string         `json:"status"`
-	Waypoints  []WaypointDTO  `json:"waypoints"`
-	ExpiresAt  time.Time      `json:"expires_at"`
+	BookingID uuid.UUID           `json:"booking_id"`
+	Status    string              `json:"status"`
+	Waypoints []SharedWaypointDTO `json:"waypoints"`
+	ExpiresAt time.Time           `json:"expires_at"`
 }
 
-// WaypointDTO is the API representation of a waypoint.
-type WaypointDTO struct {
+// SharedWaypointDTO is the public API representation of a waypoint.
+type SharedWaypointDTO struct {
 	Latitude   float64   `json:"latitude"`
 	Longitude  float64   `json:"longitude"`
 	Speed      float64   `json:"speed_kmh"`
@@ -95,9 +95,9 @@ func (s *ShareService) GetSharedTracking(ctx context.Context, token string) (*Sh
 		return nil, fmt.Errorf("failed to get waypoints: %w", err)
 	}
 
-	waypointDTOs := make([]WaypointDTO, len(waypoints))
+	waypointDTOs := make([]SharedWaypointDTO, len(waypoints))
 	for i, wp := range waypoints {
-		waypointDTOs[i] = WaypointDTO{
+		waypointDTOs[i] = SharedWaypointDTO{
 			Latitude:   wp.Latitude,
 			Longitude:  wp.Longitude,
 			Speed:      wp.Speed,
