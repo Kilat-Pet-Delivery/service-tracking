@@ -54,16 +54,17 @@ func main() {
 	}
 
 	// Run database migrations.
-	if cfg.AppEnv == "development" {
-		if err := db.AutoMigrate(&repository.TripTrackModel{}, &repository.WaypointModel{}, &repository.ChatMessageModel{}, &repository.SharedTripModel{}); err != nil {
-			log.Fatal("failed to auto-migrate database", zap.Error(err))
-		}
-		log.Info("database migration completed (dev auto-migrate)")
-	} else {
-		dbURL := dbConfig.DatabaseURL()
-		if err := database.RunMigrations(dbURL, "migrations", log); err != nil {
-			log.Fatal("failed to run migrations", zap.Error(err))
-		}
+	//
+	// KPD-61: this used to AutoMigrate in development and run the SQL migrations
+	// everywhere else. chat_messages and shared_trips had no SQL migration, so
+	// they existed only in development. Now that 003 and 004 cover them, every
+	// model in this service has a SQL migration, so there is one path for all
+	// environments and the two can no longer drift apart. Development still gets
+	// its schema automatically, because the server applies the migrations at
+	// startup.
+	dbURL := dbConfig.DatabaseURL()
+	if err := database.RunMigrations(dbURL, "migrations", log); err != nil {
+		log.Fatal("failed to run migrations", zap.Error(err))
 	}
 
 	// Initialize JWT manager.
