@@ -32,7 +32,7 @@ type TrackingDTO struct {
 	BookingID       uuid.UUID     `json:"booking_id"`
 	RunnerID        uuid.UUID     `json:"runner_id"`
 	Status          string        `json:"status"`
-	TotalDistanceKm float64      `json:"total_distance_km"`
+	TotalDistanceKm float64       `json:"total_distance_km"`
 	StartedAt       time.Time     `json:"started_at"`
 	CompletedAt     *time.Time    `json:"completed_at,omitempty"`
 	Waypoints       []WaypointDTO `json:"waypoints"`
@@ -209,8 +209,8 @@ func (s *TrackingService) HandleDeliveryConfirmed(ctx context.Context, event eve
 		BookingID:     track.BookingID(),
 		RunnerID:      track.RunnerID(),
 		TotalDistance: totalDistance,
-		CompletedAt:  *track.CompletedAt(),
-		OccurredAt:   time.Now().UTC(),
+		CompletedAt:   *track.CompletedAt(),
+		OccurredAt:    time.Now().UTC(),
 	}
 	cloudEvt, err := kafka.NewCloudEvent("service-tracking", events.TrackingCompleted, completedEvt)
 	if err != nil {

@@ -107,9 +107,9 @@ func (s *ShareService) GetSharedTracking(ctx context.Context, token string) (*Sh
 	}
 
 	return &SharedTrackingDTO{
-		BookingID:  st.BookingID(),
-		Status:     string(track.Status()),
-		Waypoints:  waypointDTOs,
-		ExpiresAt:  st.ExpiresAt(),
+		BookingID: st.BookingID(),
+		Status:    string(track.Status()),
+		Waypoints: waypointDTOs,
+		ExpiresAt: st.ExpiresAt(),
 	}, nil
 }
