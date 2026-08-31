@@ -22,8 +22,8 @@ type Waypoint struct {
 	ID         uuid.UUID
 	Latitude   float64
 	Longitude  float64
-	Speed      float64   // km/h
-	Heading    float64   // degrees
+	Speed      float64 // km/h
+	Heading    float64 // degrees
 	RecordedAt time.Time
 }
 

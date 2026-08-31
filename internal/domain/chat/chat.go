@@ -70,10 +70,10 @@ func Reconstruct(id, bookingID, senderID uuid.UUID, senderRole string, msgType M
 }
 
 // Getters.
-func (m *ChatMessage) ID() uuid.UUID         { return m.id }
-func (m *ChatMessage) BookingID() uuid.UUID   { return m.bookingID }
-func (m *ChatMessage) SenderID() uuid.UUID    { return m.senderID }
-func (m *ChatMessage) SenderRole() string     { return m.senderRole }
+func (m *ChatMessage) ID() uuid.UUID            { return m.id }
+func (m *ChatMessage) BookingID() uuid.UUID     { return m.bookingID }
+func (m *ChatMessage) SenderID() uuid.UUID      { return m.senderID }
+func (m *ChatMessage) SenderRole() string       { return m.senderRole }
 func (m *ChatMessage) MessageType() MessageType { return m.msgType }
-func (m *ChatMessage) Content() string        { return m.content }
-func (m *ChatMessage) CreatedAt() time.Time   { return m.createdAt }
+func (m *ChatMessage) Content() string          { return m.content }
+func (m *ChatMessage) CreatedAt() time.Time     { return m.createdAt }

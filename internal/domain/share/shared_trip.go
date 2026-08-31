@@ -52,10 +52,10 @@ func (s *SharedTrip) IsExpired() bool {
 
 // Getters.
 func (s *SharedTrip) ID() uuid.UUID        { return s.id }
-func (s *SharedTrip) BookingID() uuid.UUID  { return s.bookingID }
-func (s *SharedTrip) ShareToken() string    { return s.shareToken }
-func (s *SharedTrip) ExpiresAt() time.Time  { return s.expiresAt }
-func (s *SharedTrip) CreatedAt() time.Time  { return s.createdAt }
+func (s *SharedTrip) BookingID() uuid.UUID { return s.bookingID }
+func (s *SharedTrip) ShareToken() string   { return s.shareToken }
+func (s *SharedTrip) ExpiresAt() time.Time { return s.expiresAt }
+func (s *SharedTrip) CreatedAt() time.Time { return s.createdAt }
 
 func generateToken() (string, error) {
 	b := make([]byte, 16)

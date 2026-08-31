@@ -20,7 +20,7 @@ type TripTrackModel struct {
 	BookingID       uuid.UUID  `gorm:"type:uuid;uniqueIndex;not null"`
 	RunnerID        uuid.UUID  `gorm:"type:uuid;index;not null"`
 	Status          string     `gorm:"type:varchar(20);not null;default:'active';index"`
-	TotalDistanceKm float64   `gorm:"type:decimal(10,3);default:0"`
+	TotalDistanceKm float64    `gorm:"type:decimal(10,3);default:0"`
 	StartedAt       time.Time  `gorm:"type:timestamptz;not null;default:now()"`
 	CompletedAt     *time.Time `gorm:"type:timestamptz"`
 	Version         int64      `gorm:"not null;default:1"`
