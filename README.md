@@ -78,12 +78,26 @@ go mod download
 # Enable PostGIS extension
 psql -d tracking_db -c "CREATE EXTENSION IF NOT EXISTS postgis;"
 
-# Run migrations
-go run cmd/migrate/main.go
+# Point at the shared dev-infra stack (cd ~/Documents/dev-infra; ./dev.ps1 up kilat)
+export DB_HOST=localhost DB_PORT=5432 DB_USER=kilat DB_PASSWORD=kilat_secret
+export DB_NAME=kilat_tracking DB_SSL_MODE=disable
+
+# Apply the SQL migrations -- run from the repository root, the migration
+# source is resolved relative to the working directory
+go run ./cmd/migrate
 
 # Start the service
-go run cmd/server/main.go
+go run ./cmd/server
 ```
+
+### Two migration modes
+
+`cmd/migrate` applies the golang-migrate files in `migrations/` and is the source of
+truth for the schema. The server additionally auto-migrates the GORM models when
+`APP_ENV=development`, which is why the two can drift.
+
+`chat_messages` and `shared_trips` have no SQL migration yet, so they exist only under
+the development `AutoMigrate` branch. Tracked as **KPD-61**.
 
 The service will start on port 8005.
 
